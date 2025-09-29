@@ -1,4 +1,3 @@
-# Äännestyssovellus
 ## Sovelluksen toimintaperiaate
 
 Sovelluksen toimintaperiaate on seuraava:
