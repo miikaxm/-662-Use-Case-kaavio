@@ -12,6 +12,11 @@ document.getElementById("logInForm").addEventListener("submit", logIn)
 document.getElementById("logInButton").addEventListener("click", showLogIn)
 document.getElementById("logInFormCloseBtn").addEventListener("click", hideLogIn)
 
+
+// Formien kehotukset
+document.getElementById("registerFromLogin").addEventListener("click", forceRegisterForm)
+document.getElementById("logInFromRegisteration").addEventListener("click", forceLogInForm)
+
 let logInFormVisible = false
 let registerFormVisible = false
 let loggedInAs = null
@@ -22,6 +27,16 @@ function getUsers() {
 
 function saveUsers(users) {
     localStorage.setItem('users', JSON.stringify(users));
+}
+
+function forceRegisterForm() {
+    hideLogIn()
+    showRegisterForm()
+}
+
+function forceLogInForm() {
+    hideRegisterForm()
+    showLogIn()
 }
 
 function showLogIn() {
