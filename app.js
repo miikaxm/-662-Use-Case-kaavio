@@ -2,8 +2,10 @@
 document.getElementById("registerBtn").addEventListener("click", showRegisterForm)
 document.getElementById("RegisterFormCloseBtn").addEventListener("click", hideRegisterForm)
 
+// log off nappi
 document.getElementById("dropdownLogOff").addEventListener("click", logOff)
 
+// FOrmien sumbit
 document.getElementById('RegisterForm').addEventListener("submit", register)
 document.getElementById("logInForm").addEventListener("submit", logIn)
 
@@ -74,7 +76,7 @@ function register(){
     const users = getUsers();
 
     if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
-        alert("Käyttäjätunnus on jo olemassa")
+        document.getElementById("usernameTakenWarning").innerHTML = "Käyttäjätunnus on jo olemassa"
         return
     }
 
@@ -97,13 +99,14 @@ function logIn(){
     const user = users.find(u => u.username.toLowerCase() === username.toLowerCase());
 
     if(!user) {
-        alert("Käyttäjää tällä nimellä ei löydy")
-        return
+        document.getElementById("usernameInvalid").innerHTML = "Käyttäjää tällä nimellä ei löydy"
+    } else {
+        document.getElementById("usernameInvalid").innerHTML = ""
     }
 
     if (user.password === password) {
-        alert("kirjautuminen onnistui")
         loggedInAs = username
+        document.getElementById("dropdownLogOff").classList.remove("disabled")
         document.getElementById("navUsername").innerHTML = username
         document.getElementById("logInButton").innerHTML = "Kirjaudu ulos"
         if (user.moderator === true) {
@@ -111,13 +114,14 @@ function logIn(){
         }
         hideLogIn()
     } else {
-        alert("Väärä salasana")
-    }
+        document.getElementById("wrongPassword").innerHTML = "Väärä salasana"
+    } 
 }
 
 function logOff() {
     if (loggedInAs !== null){
         loggedInAs = null
+        document.getElementById("dropdownLogOff").classList.add("disabled")
         document.getElementById("navUsername").innerHTML = ""
         document.getElementById("logInButton").innerHTML = "Kirjaudu sisään"
         document.getElementById("createPollBtn").classList.add("invisible")

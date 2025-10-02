@@ -22,7 +22,7 @@
                             Valikko
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" id="dropdownLogOff" href="#">Kirjaudu ulos</a></li>
+                            <li><a class="dropdown-item disabled" id="dropdownLogOff" href="#">Kirjaudu ulos</a></li>
                             <li><a id="registerBtn" class="dropdown-item" href="#">Rekisteröidy</a></li>
                         </ul>
                     </li>
@@ -51,10 +51,12 @@
             <div class="form-floating mb-3">
                 <input type="text" class="form-control bg-secondary text-white border-0" id="loginUsername" placeholder="Syötä käyttäjänimesi" required>
                 <label for="loginUsername" class="form-label text-white">Käyttäjätunnus</label>
+                <p id="usernameInvalid" class="text-danger"></p>
             </div>
             <div class="form-floating mb-3">
                 <input type="password" class="form-control bg-secondary text-white border-0" id="loginPassword" placeholder="Syötä salasanasi" required>
                 <label for="loginPassword" class="form-label text-white">Salasana</label>
+                <p id="wrongPassword" class="text-danger"></p>
             </div>
             <button type="submit" class="btn btn-primary w-100 mb-5">Kirjaudu sisään</button>
         </form>
@@ -69,6 +71,7 @@
             <div class="form-floating mb-3">
                 <input type="text" class="form-control bg-secondary text-white border-0" id="registerUsername" placeholder="Syötä käyttäjänimesi" required>
                 <label for="registerUsername" class="form-label text-white">Käyttäjätunnus</label>
+                <p id="usernameTakenWarning" class="text-danger"></p>
             </div>
             <div class="form-floating mb-3">
                 <input type="password" class="form-control bg-secondary text-white border-0" id="registerPassword" placeholder="Syötä salasanasi" required>
