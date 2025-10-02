@@ -55,6 +55,7 @@ function hideRegisterForm(){
 function register(){
     const username = document.getElementById("registerUsername").value.trim();
     const password = document.getElementById("registerPassword").value
+    const moderator = document.getElementById("checkDefault").checked
     const users = getUsers();
 
     if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
@@ -64,7 +65,8 @@ function register(){
 
     const newUser = {
         username,
-        password
+        password,
+        moderator
     }
 
     users.push(newUser)
@@ -89,6 +91,9 @@ function logIn(){
         loggedInAs = username
         document.getElementById("navUsername").innerHTML = username
         document.getElementById("logInButton").innerHTML = "Kirjaudu ulos"
+        if (user.moderator === true) {
+            document.getElementById("createPollBtn").classList.remove("invisible")
+        }
         hideLogIn()
     } else {
         alert("Väärä salasana")
@@ -100,6 +105,7 @@ function logOff() {
         loggedInAs = null
         document.getElementById("navUsername").innerHTML = ""
         document.getElementById("logInButton").innerHTML = "Kirjaudu sisään"
+        document.getElementById("createPollBtn").classList.add("invisible")
     } else {
         alert("Et ole kirjautunut sisään!")
     }
