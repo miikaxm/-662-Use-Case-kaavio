@@ -14,6 +14,10 @@ document.getElementById("logInForm").addEventListener("submit", logIn)
 document.getElementById("logInButton").addEventListener("click", showLogIn)
 document.getElementById("logInFormCloseBtn").addEventListener("click", hideLogIn)
 
+// Event listenerit äänestyksen luonti formille
+document.getElementById("createVotingBtn").addEventListener("click", showCreateVoting)
+document.getElementById("createVotingCloseBtn").addEventListener("click", hideCreateVoting)
+
 
 // Formien kehotukset
 document.getElementById("registerFromLogin").addEventListener("click", forceRegisterForm)
@@ -39,6 +43,14 @@ function forceRegisterForm() {
 function forceLogInForm() {
     hideRegisterForm()
     showLogIn()
+}
+
+function showCreateVoting() {
+    document.getElementById("createVoting").classList.remove("invisible")
+}
+
+function hideCreateVoting() {
+    document.getElementById("createVoting").classList.add("invisible")
 }
 
 function showLogIn() {

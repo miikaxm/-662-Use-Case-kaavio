@@ -36,7 +36,7 @@
                     <a class="nav-link text-white" id="navUsername" aria-current="page" href="#"></a>
                 </li>
                 <li id="createPollBtn" class="nav-item invisible">
-                    <a class="nav-link active border border-primary rounded-pill" aria-current="page" href="#">Luo äänestys</a>
+                    <a class="nav-link active border border-primary rounded-pill" aria-current="page" id="createVotingBtn" href="#">Luo äänestys</a>
                 </li>
             </ul>
         </div>
@@ -85,6 +85,38 @@
             </div>
             <button type="submit" class="btn btn-primary w-100 mb-5">Luo tunnus</button>
         </form>
+    </div>
+
+    <!-- Äänestyksen luonti form -->
+    <div id="createVoting" class="container start-50 translate-middle top-50 ps-4 pe-4 bg-dark text-white rounded shadow position-absolute invisible" style="max-width: 600px;">
+        <div class="p-3">
+            <button id="createVotingCloseBtn" type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" aria-label="Sulje"></button>
+            <h4 class="pb-3 border-bottom border-2">Äänestyksen luonti</h4>
+        </div>
+        <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Otsikko" aria-label="Otsikko">
+       </div>
+       <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Kuvaus" aria-label="Kuvaus">
+       </div>
+       <h4>Vaihtoehdot</h4>
+       <p>Valitse vähintään kaksi vaihtoehtoa!</p>
+       <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Vaihtoehto 1" aria-label="Vaihtoehto 1">
+       </div>
+       <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Vaihtoehto 2" aria-label="Vaihtoehto 2">
+       </div>
+       <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Vaihtoehto 3" aria-label="Vaihtoehto 3">
+       </div>
+       <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Vaihtoehto 4" aria-label="Vaihtoehto 4">
+       </div>
+       <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Vaihtoehto 5" aria-label="Vaihtoehto 5">
+       </div>
+        <button type="submit" class="btn btn-primary w-100 mb-5">Luo äänestys</button>
     </div>
 
     <!-- Äänestykset -->
