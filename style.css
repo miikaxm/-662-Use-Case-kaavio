@@ -1,0 +1,18 @@
+.custom-radio-label {
+  width: 380px;
+  border-radius: 5px;
+  background-color: rgb(54, 54, 54);
+  transition: all 0.25s ease; /* pehmeä siirtymä */
+}
+
+.form-check-input:checked + .custom-radio-label {
+  background-color: rgb(100, 100, 100);
+  color: #fff;
+  transform: scale(1.02); /* pieni "pomppaus" */
+}
+
+.custom-radio-label:hover {
+  background-color: rgb(80, 80, 80);
+  transform: scale(1.01);
+  cursor: pointer;
+}
