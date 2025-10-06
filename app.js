@@ -1,27 +1,19 @@
-// Event listenerit rekisteröitymis formille
-document.getElementById("registerBtn").addEventListener("click", showRegisterForm)
-document.getElementById("RegisterFormCloseBtn").addEventListener("click", hideRegisterForm)
-
 // log off nappi
 document.getElementById("dropdownLogOff").addEventListener("click", logOff)
 
 // FOrmien sumbit
-document.getElementById('RegisterForm').addEventListener("submit", register)
-document.getElementById("logInForm").addEventListener("submit", logIn)
-
-
-// Event listenerit kirjautumis formille
-document.getElementById("logInButton").addEventListener("click", showLogIn)
-document.getElementById("logInFormCloseBtn").addEventListener("click", hideLogIn)
+document.getElementById('registerModal').addEventListener("submit", register)
+document.getElementById("LogInModal").addEventListener("submit", logIn)
 
 // Event listenerit äänestyksen luonti formille
 document.getElementById("createVotingBtn").addEventListener("click", showCreateVoting)
 document.getElementById("createVotingCloseBtn").addEventListener("click", hideCreateVoting)
 
+document.getElementById("logInButton").addEventListener("click", checkLogState)
 
 // Formien kehotukset
-document.getElementById("registerFromLogin").addEventListener("click", forceRegisterForm)
-document.getElementById("logInFromRegisteration").addEventListener("click", forceLogInForm)
+// document.getElementById("registerFromLogin").addEventListener("click", forceRegisterForm)
+// document.getElementById("logInFromRegisteration").addEventListener("click", forceLogInForm)
 
 let logInFormVisible = false
 let registerFormVisible = false
@@ -35,16 +27,6 @@ function saveUsers(users) {
     localStorage.setItem('users', JSON.stringify(users));
 }
 
-function forceRegisterForm() {
-    hideLogIn()
-    showRegisterForm()
-}
-
-function forceLogInForm() {
-    hideRegisterForm()
-    showLogIn()
-}
-
 function showCreateVoting() {
     document.getElementById("createVoting").classList.remove("invisible")
 }
@@ -53,35 +35,15 @@ function hideCreateVoting() {
     document.getElementById("createVoting").classList.add("invisible")
 }
 
-function showLogIn() {
-    if (loggedInAs === null) {
-        if (registerFormVisible === false) {
-        logInFormVisible = true
-        document.getElementById("logInForm").classList.remove("invisible")
-        } 
-    } else {
+function checkLogState() {
+    if (loggedInAs !== null) {
         logOff()
+        return
     }
 }
 
-function hideLogIn() {
-    logInFormVisible = false
-    document.getElementById("logInForm").classList.add("invisible")
-}
-
-function showRegisterForm(){
-    if (logInFormVisible === false) {
-        registerFormVisible = true
-        document.getElementById("RegisterForm").classList.remove("invisible")
-    }
-}
-
-function hideRegisterForm(){
-    registerFormVisible = false
-    document.getElementById("RegisterForm").classList.add("invisible")
-}
-
-function register(){
+function register(event){
+    event.preventDefault()
     const username = document.getElementById("registerUsername").value.trim();
     const password = document.getElementById("registerPassword").value
     const moderator = document.getElementById("checkDefault").checked
@@ -100,10 +62,10 @@ function register(){
 
     users.push(newUser)
     saveUsers(users)
-    hideRegisterForm()
 }
 
-function logIn(){
+function logIn(event){
+    event.preventDefault()
     const username = document.getElementById("loginUsername").value.trim();
     const password = document.getElementById("loginPassword").value
     const users = getUsers()
@@ -124,7 +86,6 @@ function logIn(){
         if (user.moderator === true) {
             document.getElementById("createPollBtn").classList.remove("invisible")
         }
-        hideLogIn()
     } else {
         document.getElementById("wrongPassword").innerHTML = "Väärä salasana"
     } 
