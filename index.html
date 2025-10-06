@@ -43,51 +43,6 @@
         </div>
     </nav>
 
-    <!-- Log in formi -->
-    <!-- <div id="logInForm" class="container start-50 translate-middle top-50 ps-4 pe-4 bg-dark text-white rounded shadow position-absolute invisible" style="max-width: 600px;">
-        <button id="logInFormCloseBtn" type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" aria-label="Sulje"></button>
-        <h2 class="pt-4 text-center">Kirjaudu sisään</h2>
-        <p class="mb-4 pt-1 text-center text-secondary">Eikö sinulla ole vielä käyttäjätunnusta?<br>Luo se <a href="#" id="registerFromLogin">tästä</a></p>
-        <form>
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control bg-secondary text-white border-0" id="loginUsername" placeholder="Syötä käyttäjänimesi" required>
-                <label for="loginUsername" class="form-label text-white">Käyttäjätunnus</label>
-                <p id="usernameInvalid" class="text-danger"></p>
-            </div>
-            <div class="form-floating mb-3">
-                <input type="password" class="form-control bg-secondary text-white border-0" id="loginPassword" placeholder="Syötä salasanasi" required>
-                <label for="loginPassword" class="form-label text-white">Salasana</label>
-                <p id="wrongPassword" class="text-danger"></p>
-            </div>
-            <button type="submit" class="btn btn-primary w-100 mb-5">Kirjaudu sisään</button>
-        </form>
-    </div> -->
-
-    <!-- Register formi -->
-    <!-- <div id="RegisterForm" class="container start-50 translate-middle top-50 ps-4 pe-4 bg-dark text-white rounded shadow position-absolute invisible" style="max-width: 600px;">
-        <button id="RegisterFormCloseBtn" type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" aria-label="Sulje"></button>
-        <h2 class="pt-4 text-center">Rekisteröidy</h2>
-        <p class="mb-4 pt-1 text-center text-secondary">Oletko jo rekisteröitynyt?<br>Kirjaudu sisään <a href="#" id="logInFromRegisteration">tästä</a></p>
-        <form>
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control bg-secondary text-white border-0" id="registerUsername" placeholder="Syötä käyttäjänimesi" required>
-                <label for="registerUsername" class="form-label text-white">Käyttäjätunnus</label>
-                <p id="usernameTakenWarning" class="text-danger"></p>
-            </div>
-            <div class="form-floating mb-3">
-                <input type="password" class="form-control bg-secondary text-white border-0" id="registerPassword" placeholder="Syötä salasanasi" required>
-                <label for="loginPassword" class="form-label text-white">Salasana</label>
-            </div>
-            <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" value="" id="checkDefault">
-                <label class="form-check-label" for="checkDefault">
-                    Tee käyttäjästä ylläpitäjä
-                </label>
-            </div>
-            <button type="submit" class="btn btn-primary w-100 mb-5">Luo tunnus</button>
-        </form>
-    </div> -->
-
     <!-- Äänestyksen luonti form -->
     <div id="createVoting" class="container start-50 translate-middle top-50 ps-4 pe-4 bg-dark text-white rounded shadow position-absolute invisible" style="max-width: 600px;">
         <div class="p-3">
@@ -258,21 +213,20 @@
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="registerModalLabel">Kirjaudu sisään</h1>
+                <h1 class="modal-title fs-5" id="registerModalLabel">Rekisteröidy</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p class="mb-4 pt-1 text-center text-secondary">Oletko jo rekisteröitynyt?<br>Kirjaudu sisään <a href="#" data-bs-target="#LogInModal" data-bs-toggle="modal" id="registerFromLogin">tästä</a></p>
+                <p class="mb-4 pt-1 text-center text-secondary">Oletko jo rekisteröitynyt?<br>Kirjaudu sisään <a href="#" data-bs-target="#LogInModal" data-bs-toggle="modal" id="logInFromRegisteration">tästä</a></p>
                 <form>
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control bg-secondary text-white border-0" id="registerUsername" placeholder="Syötä käyttäjänimesi" required>
                         <label for="registerUsername" class="form-label text-white">Käyttäjätunnus</label>
-                        <p id="usernameInvalid" class="text-danger"></p>
+                        <p id="usernameTakenWarning" class="text-danger"></p>
                     </div>
                     <div class="form-floating mb-3">
                         <input type="password" class="form-control bg-secondary text-white border-0" id="registerPassword" placeholder="Syötä salasanasi" required>
                         <label for="registerPassword" class="form-label text-white">Salasana</label>
-                        <p id="wrongPassword" class="text-danger"></p>
                     </div>
                     <div class="form-check mb-3">
                         <input class="form-check-input" type="checkbox" value="" id="checkDefault">
@@ -289,10 +243,6 @@
                 </form>
         </div>
     </div>
-
-    
-
-
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>

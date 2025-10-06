@@ -1,7 +1,14 @@
-// log off nappi
+// Modal info
+const loginModalEl = document.getElementById("LogInModal");
+const registerModalEl = document.getElementById("registerModal");
+
+const loginModal = new bootstrap.Modal(loginModalEl);
+const registerModal = new bootstrap.Modal(registerModalEl);
+
+// Log off nappi
 document.getElementById("dropdownLogOff").addEventListener("click", logOff)
 
-// FOrmien sumbit
+// Formien sumbit
 document.getElementById('registerModal').addEventListener("submit", register)
 document.getElementById("LogInModal").addEventListener("submit", logIn)
 
@@ -9,14 +16,9 @@ document.getElementById("LogInModal").addEventListener("submit", logIn)
 document.getElementById("createVotingBtn").addEventListener("click", showCreateVoting)
 document.getElementById("createVotingCloseBtn").addEventListener("click", hideCreateVoting)
 
+// Kirjautumisen tilan tarkistus
 document.getElementById("logInButton").addEventListener("click", checkLogState)
 
-// Formien kehotukset
-// document.getElementById("registerFromLogin").addEventListener("click", forceRegisterForm)
-// document.getElementById("logInFromRegisteration").addEventListener("click", forceLogInForm)
-
-let logInFormVisible = false
-let registerFormVisible = false
 let loggedInAs = null
 
 function getUsers() {
@@ -62,6 +64,7 @@ function register(event){
 
     users.push(newUser)
     saveUsers(users)
+    registerModal.hide()
 }
 
 function logIn(event){
@@ -83,6 +86,7 @@ function logIn(event){
         document.getElementById("dropdownLogOff").classList.remove("disabled")
         document.getElementById("navUsername").innerHTML = username
         document.getElementById("logInButton").innerHTML = "Kirjaudu ulos"
+        loginModal.hide()
         if (user.moderator === true) {
             document.getElementById("createPollBtn").classList.remove("invisible")
         }
