@@ -16,10 +16,6 @@ document.getElementById("dropdownLogOff").addEventListener("click", logOff)
 document.getElementById('registerModal').addEventListener("submit", register)
 document.getElementById("LogInModal").addEventListener("submit", logIn)
 
-// Event listenerit äänestyksen luonti formille
-// document.getElementById("createVotingBtn").addEventListener("click", showCreateVoting)
-// document.getElementById("createVotingCloseBtn").addEventListener("click", hideCreateVoting)
-
 // Kirjautumisen tilan tarkistus
 document.getElementById("logInButton").addEventListener("click", checkLogState)
 
@@ -31,14 +27,6 @@ function getUsers() {
 
 function saveUsers(users) {
     localStorage.setItem('users', JSON.stringify(users));
-}
-
-function showCreateVoting() {
-    document.getElementById("createVoting").classList.remove("invisible")
-}
-
-function hideCreateVoting() {
-    document.getElementById("createVoting").classList.add("invisible")
 }
 
 function checkLogState() {
