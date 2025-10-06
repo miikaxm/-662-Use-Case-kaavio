@@ -5,6 +5,10 @@ const registerModalEl = document.getElementById("registerModal");
 const loginModal = new bootstrap.Modal(loginModalEl);
 const registerModal = new bootstrap.Modal(registerModalEl);
 
+const logInButton = document.getElementById("logInButton");
+const navUsername = document.getElementById("navUsername");
+const logOffItem = document.getElementById("dropdownLogOff");
+
 // Log off nappi
 document.getElementById("dropdownLogOff").addEventListener("click", logOff)
 
@@ -13,8 +17,8 @@ document.getElementById('registerModal').addEventListener("submit", register)
 document.getElementById("LogInModal").addEventListener("submit", logIn)
 
 // Event listenerit äänestyksen luonti formille
-document.getElementById("createVotingBtn").addEventListener("click", showCreateVoting)
-document.getElementById("createVotingCloseBtn").addEventListener("click", hideCreateVoting)
+// document.getElementById("createVotingBtn").addEventListener("click", showCreateVoting)
+// document.getElementById("createVotingCloseBtn").addEventListener("click", hideCreateVoting)
 
 // Kirjautumisen tilan tarkistus
 document.getElementById("logInButton").addEventListener("click", checkLogState)
@@ -39,8 +43,26 @@ function hideCreateVoting() {
 
 function checkLogState() {
     if (loggedInAs !== null) {
-        logOff()
-        return
+        loggedInAs = null
+        updateLogInState()
+        console.log("Käyttäjä kirjautui ulos");
+    }
+}
+
+function updateLogInState() {
+    if (loggedInAs !== null){
+        logInButton.textContent = "Kirjaudu ulos"
+        logInButton.removeAttribute("data-bs-toggle")
+        logInButton.removeAttribute("data-bs-target")
+        logOffItem.classList.remove("disabled");
+        navUsername.textContent = loggedInAs;
+    } else {
+        logInButton.textContent = "Kirjaudu sisään";
+        logInButton.setAttribute("data-bs-toggle", "modal");
+        logInButton.setAttribute("data-bs-target", "#LogInModal");
+        document.getElementById("createPollBtn").classList.add("invisible")
+        logOffItem.classList.add("disabled");
+        navUsername.textContent = "";
     }
 }
 
@@ -83,9 +105,7 @@ function logIn(event){
 
     if (user.password === password) {
         loggedInAs = username
-        document.getElementById("dropdownLogOff").classList.remove("disabled")
-        document.getElementById("navUsername").innerHTML = username
-        document.getElementById("logInButton").innerHTML = "Kirjaudu ulos"
+        updateLogInState()
         loginModal.hide()
         if (user.moderator === true) {
             document.getElementById("createPollBtn").classList.remove("invisible")
@@ -97,11 +117,7 @@ function logIn(event){
 
 function logOff() {
     if (loggedInAs !== null){
-        loggedInAs = null
-        document.getElementById("dropdownLogOff").classList.add("disabled")
-        document.getElementById("navUsername").innerHTML = ""
-        document.getElementById("logInButton").innerHTML = "Kirjaudu sisään"
-        document.getElementById("createPollBtn").classList.add("invisible")
+        checkLogState()
     } else {
         alert("Et ole kirjautunut sisään!")
     }

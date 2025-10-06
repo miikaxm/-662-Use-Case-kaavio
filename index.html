@@ -37,7 +37,7 @@
                     <a class="nav-link text-white" id="navUsername" aria-current="page" href="#"></a>
                 </li>
                 <li id="createPollBtn" class="nav-item invisible">
-                    <a class="nav-link active border border-primary rounded-pill" aria-current="page" id="createVotingBtn" href="#">Luo äänestys</a>
+                    <a class="nav-link active border border-primary rounded-pill" aria-current="page" id="createVotingBtn" data-bs-toggle="modal" data-bs-target="#createVotingModal" href="#">Luo äänestys</a>
                 </li>
             </ul>
         </div>
@@ -200,7 +200,7 @@
                     </div>
                     </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Sulje</button>
                             <button type="submit" class="btn btn-primary">Kirjaudu</button>
                         </div>
                     </div>
@@ -236,7 +236,7 @@
                     </div>
                     </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Sulje</button>
                             <button type="submit" class="btn btn-primary">Kirjaudu</button>
                         </div>
                     </div>
@@ -244,6 +244,48 @@
         </div>
     </div>
 
+    <!-- Äänestyksen luonti modal -->
+    <div class="modal fade" id="createVotingModal" tabindex="-1" aria-labelledby="createVotingModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="createVotingModalLabel">Äänestyksen luonti</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Otsikko" aria-label="Otsikko">
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Kuvaus" aria-label="Kuvaus">
+                    </div>
+                    <h4>Vaihtoehdot</h4>
+                    <p>Valitse vähintään kaksi vaihtoehtoa!</p>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Vaihtoehto 1" aria-label="Vaihtoehto 1">
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Vaihtoehto 2" aria-label="Vaihtoehto 2">
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Vaihtoehto 3" aria-label="Vaihtoehto 3">
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Vaihtoehto 4" aria-label="Vaihtoehto 4">
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Vaihtoehto 5" aria-label="Vaihtoehto 5">
+                    </div>
+                    </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Sulje</button>
+                            <button type="submit" class="btn btn-primary">Luo äänestys</button>
+                        </div>
+                    </div>
+                </form>
+        </div>
+    </div>
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="app.js"></script>
