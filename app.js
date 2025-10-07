@@ -27,6 +27,9 @@ document.getElementById("logInButton").addEventListener("click", checkLogState)
 
 let loggedInAs = null
 
+// Äänestysten määrä
+let pollAmount = 0
+
 function getUsers() {
     return JSON.parse(localStorage.getItem('users') || '[]');
 }
@@ -139,8 +142,12 @@ form.addEventListener("submit", (e) => {
   const description = document.getElementById("pollDescription").value.trim();
   const polls = getPolls()
   const options = Array.from(document.querySelectorAll(".pollOption"))
-    .map(opt => opt.value.trim())
-    .filter(v => v !== "");
+    .map(opt => {
+      const name = opt.value.trim();
+      if (name === "") return null;
+      return { name, votes: 0 };
+    })
+    .filter(v => v !== null);
   const newPoll = {
     title,
     description,
@@ -148,6 +155,7 @@ form.addEventListener("submit", (e) => {
   }
   polls.push(newPoll)
   savePolls(polls)
+  pollAmount += 1;
   if (options.length < 2) {
     alert("Lisää vähintään kaksi vaihtoehtoa!");
     return;
@@ -162,13 +170,13 @@ form.addEventListener("submit", (e) => {
         <div class="m-2 form-check my-2">
           <input class="form-check-input" type="radio" name="poll_${title}" id="${title}_opt${i}">
           <label class="form-check-label p-1 custom-radio-label" for="${title}_opt${i}">
-            ${opt}
+            ${opt.name}
           </label>
         </div>
       `).join("")}
       <div class="p-3 mt-4" style="background-color: rgb(54,54,54); border-top: 2px solid rgb(70,70,70);">
-        <a style="display:inline; padding-right:200px; text-decoration:none;" class="text-white" href="#">Katso tulokset</a>
-        <button type="button" class="btn border" style="display:inline;">Äänestä</button>
+        <a style="display:inline; padding-right:200px; text-decoration:none;" class="text-white" href="#" id="checkVotesBtn${pollAmount}">Katso tulokset</a>
+        <button type="button" class="btn border" style="display:inline;" id="voteBtn${pollAmount}">Äänestä</button>
       </div>
     </div>
   `;
@@ -200,7 +208,7 @@ function checkPollState() {
         <div class="m-2 form-check my-2">
           <input class="form-check-input" type="radio" name="poll_${poll.title}" id="${poll.title}_opt${i}">
           <label class="form-check-label p-1 custom-radio-label" for="${poll.title}_opt${i}">
-            ${opt}
+            ${opt.name}
           </label>
         </div>
       `).join("")}
@@ -213,5 +221,4 @@ function checkPollState() {
   pollsContainer.insertAdjacentHTML("beforeend", pollHTML);
   });
 }
-
 
