@@ -35,6 +35,14 @@ function saveUsers(users) {
     localStorage.setItem('users', JSON.stringify(users));
 }
 
+function getPolls() {
+  return JSON.parse(localStorage.getItem("polls") || "[]");
+}
+
+function savePolls(polls) {
+  localStorage.setItem("polls", JSON.stringify(polls))
+}
+
 function checkLogState() {
     if (loggedInAs !== null) {
         loggedInAs = null
@@ -129,9 +137,17 @@ form.addEventListener("submit", (e) => {
   e.preventDefault();
   const title = document.getElementById("pollTitle").value.trim();
   const description = document.getElementById("pollDescription").value.trim();
+  const polls = getPolls()
   const options = Array.from(document.querySelectorAll(".pollOption"))
     .map(opt => opt.value.trim())
     .filter(v => v !== "");
+  const newPoll = {
+    title,
+    description,
+    options
+  }
+  polls.push(newPoll)
+  savePolls(polls)
   if (options.length < 2) {
     alert("Lisää vähintään kaksi vaihtoehtoa!");
     return;
@@ -160,12 +176,42 @@ form.addEventListener("submit", (e) => {
   const modalEl = document.getElementById("createVotingModal");
   const modal = bootstrap.Modal.getInstance(modalEl);
   modal.hide();
-  form.reset();
   optionsContainer.innerHTML = `
     <label class="form-label">Vaihtoehdot</label>
     <input type="text" class="form-control mb-2 pollOption" placeholder="Vaihtoehto 1" required>
     <input type="text" class="form-control mb-2 pollOption" placeholder="Vaihtoehto 2" required>
   `;
 });
+
+
+// Käy läpi kaikki äänestykset localstoragesta sivun latautuessa ja päivittää ne sivulle näkyviin
+document.addEventListener("DOMContentLoaded", function() {
+  checkPollState()
+})
+
+function checkPollState() {
+  const polls = getPolls()
+  polls.forEach(poll => {
+    const pollHTML = `
+    <div class="col p-0 text-white" style="border: 2px solid rgb(70,70,70); border-radius: 5px;">
+      <h4 class="pt-2">${poll.title}</h4>
+      <p class="mx-2 pt-2 pb-3" style="border-bottom: 2px solid rgb(70,70,70);">${poll.description}</p>
+      ${poll.options.map((opt, i) => `
+        <div class="m-2 form-check my-2">
+          <input class="form-check-input" type="radio" name="poll_${poll.title}" id="${poll.title}_opt${i}">
+          <label class="form-check-label p-1 custom-radio-label" for="${poll.title}_opt${i}">
+            ${opt}
+          </label>
+        </div>
+      `).join("")}
+      <div class="p-3 mt-4" style="background-color: rgb(54,54,54); border-top: 2px solid rgb(70,70,70);">
+        <a style="display:inline; padding-right:200px; text-decoration:none;" class="text-white" href="#">Katso tulokset</a>
+        <button type="button" class="btn border" style="display:inline;">Äänestä</button>
+      </div>
+    </div>
+  `;
+  pollsContainer.insertAdjacentHTML("beforeend", pollHTML);
+  });
+}
 
 
