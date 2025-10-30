@@ -176,9 +176,9 @@ form.addEventListener("submit", (e) => {
           </label>
         </div>
       `).join("")}
-      <div id="containerBtns" class="p-3 mt-4" style="background-color: rgb(54,54,54); border-top: 2px solid rgb(70,70,70);">
-        <a style="display:inline; padding-right:200px; text-decoration:none;" class="text-white" href="#" id="checkVotesBtn${pollAmount}">Katso tulokset</a>
-        <button type="button" class="btn border" style="display:inline;" id="voteBtn${pollAmount}">Äänestä</button>
+      <div id="containerBtns${title}" class="p-3 mt-4" style="background-color: rgb(54,54,54); border-top: 2px solid rgb(70,70,70);">
+        <a style="display:inline; padding-right:200px; text-decoration:none;" class="text-white" href="#" id="checkVotesBtn${title}">Katso tulokset</a>
+        <button type="button" class="btn border" style="display:inline;" id="voteBtn${title}">Äänestä</button>
       </div>
     </div>
   `;
