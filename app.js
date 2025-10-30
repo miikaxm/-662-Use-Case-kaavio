@@ -165,23 +165,25 @@ form.addEventListener("submit", (e) => {
 
   // Luodaan äänestys kenttä
   const pollHTML = `
-    <div class="col p-0 text-white" style="border: 2px solid rgb(70,70,70); border-radius: 5px;">
-      <h4 class="pt-2">${title}</h4>
-      <p class="mx-2 pt-2 pb-3" style="border-bottom: 2px solid rgb(70,70,70);">${description}</p>
-      ${options.map((opt, i) => `
-        <div class="m-2 form-check my-2">
-          <input class="form-check-input" type="radio" name="poll_${title}" id="${title}_opt${i}">
-          <label class="form-check-label p-1 custom-radio-label" for="${title}_opt${i}">
-            ${opt.name}
-          </label>
+      <div class="col-12 col-sm-6 col-md-4 mb-3 text-white">
+        <div class="" style="border: 2px solid rgb(70,70,70); border-radius: 5px;">
+          <h4 class="pt-2">${title}</h4>
+          <p class="mx-2 pt-2 pb-3" style="border-bottom: 2px solid rgb(70,70,70);">${description}</p>
+          ${options.map((opt, i) => `
+            <div class="m-2 form-check my-2">
+              <input class="form-check-input" type="radio" name="poll_${title}" id="${title}_opt${i}">
+              <label class="form-check-label p-1 w-100 custom-radio-label" for="${title}_opt${i}">
+                ${opt.name}
+              </label>
+            </div>
+          `).join("")}
+          <div id="containerBtns${title}" class="p-3 mt-4" style="background-color: rgb(54,54,54); border-top: 2px solid rgb(70,70,70);">
+            <a style="display:inline; padding-right:50px; text-decoration:none;" class="text-white" href="#" id="checkVotesBtn${title}">Katso tulokset</a>
+            <button type="button" class="btn border" style="display:inline;" id="voteBtn${title}">Äänestä</button>
+          </div>
         </div>
-      `).join("")}
-      <div id="containerBtns${title}" class="p-3 mt-4" style="background-color: rgb(54,54,54); border-top: 2px solid rgb(70,70,70);">
-        <a style="display:inline; padding-right:200px; text-decoration:none;" class="text-white" href="#" id="checkVotesBtn${title}">Katso tulokset</a>
-        <button type="button" class="btn border" style="display:inline;" id="voteBtn${title}">Äänestä</button>
       </div>
-    </div>
-  `;
+    `;
   pollsContainer.insertAdjacentHTML("beforeend", pollHTML);
   const modalEl = document.getElementById("createVotingModal");
   const modal = bootstrap.Modal.getInstance(modalEl);
@@ -204,23 +206,25 @@ function checkPollState() {
   const polls = getPolls()
   polls.forEach(poll => {
     const pollHTML = `
-    <div class="col p-0 text-white" style="border: 2px solid rgb(70,70,70); border-radius: 5px;">
-      <h4 class="pt-2">${poll.title}</h4>
-      <p class="mx-2 pt-2 pb-3" style="border-bottom: 2px solid rgb(70,70,70);">${poll.description}</p>
-      ${poll.options.map((opt, i) => `
-        <div class="m-2 form-check my-2">
-          <input class="form-check-input" type="radio" name="poll_${poll.title}" id="${poll.title}_opt${i}">
-          <label class="form-check-label p-1 custom-radio-label" for="${poll.title}_opt${i}">
-            ${opt.name}
-          </label>
+      <div class="col-12 col-sm-6 col-md-4 mb-3 text-white">
+        <div class="" style="border: 2px solid rgb(70,70,70); border-radius: 5px;">
+          <h4 class="pt-2">${poll.title}</h4>
+          <p class="mx-2 pt-2 pb-3" style="border-bottom: 2px solid rgb(70,70,70);">${poll.description}</p>
+          ${poll.options.map((opt, i) => `
+            <div class="m-2 form-check my-2">
+              <input class="form-check-input" type="radio" name="poll_${poll.title}" id="${poll.title}_opt${i}">
+              <label class="form-check-label p-1 w-100 custom-radio-label" for="${poll.title}_opt${i}">
+                ${opt.name}
+              </label>
+            </div>
+          `).join("")}
+          <div id="containerBtns${poll.title}" class="p-3 mt-4" style="background-color: rgb(54,54,54); border-top: 2px solid rgb(70,70,70);">
+            <a style="display:inline; padding-right:50px; text-decoration:none;" class="text-white" href="#" id="checkVotesBtn${poll.title}">Katso tulokset</a>
+            <button type="button" class="btn border" style="display:inline;" id="voteBtn${poll.title}">Äänestä</button>
+          </div>
         </div>
-      `).join("")}
-      <div id="containerBtns${poll.title}" class="p-3 mt-4" style="background-color: rgb(54,54,54); border-top: 2px solid rgb(70,70,70);">
-        <a style="display:inline; padding-right:200px; text-decoration:none;" class="text-white" href="#" id="checkVotesBtn${poll.title}">Katso tulokset</a>
-        <button type="button" class="btn border" style="display:inline;" id="voteBtn${poll.title}">Äänestä</button>
       </div>
-    </div>
-  `;
+    `;
   pollsContainer.insertAdjacentHTML("beforeend", pollHTML);
   });
 }
@@ -243,7 +247,7 @@ function checkIfCanVote() {
   } else if (loggedInAs) {
     const polls = getPolls()
     polls.forEach(poll => {
-      const btnCheckVotes =`<a style="display:inline; padding-right:200px; text-decoration:none;" class="text-white" href="#" id="checkVotesBtn${poll.title}">Katso tulokset</a>`
+      const btnCheckVotes =`<a style="display:inline; padding-right:50px; text-decoration:none;" class="text-white" href="#" id="checkVotesBtn${poll.title}">Katso tulokset</a>`
       const btnVote = `<button type="button" class="btn border" style="display:inline;" id="voteBtn${poll.title}">Äänestä</button>`
       const noVoteMessage = document.getElementById(`noVoteMessage${poll.title}`)
       if (noVoteMessage) noVoteMessage.remove()
