@@ -52,6 +52,7 @@ function checkLogState() {
         updateLogInState()
         checkIfCanVote()
         console.log("Käyttäjä kirjautui ulos");
+        window.location.reload()
     }
 }
 
@@ -113,6 +114,7 @@ function logIn(event){
         loggedInAs = username
         updateLogInState()
         checkIfCanVote()
+        updatePollVoted()
         loginModal.hide()
         if (user.moderator === true) {
             document.getElementById("createPollBtn").classList.remove("invisible")
@@ -243,6 +245,10 @@ function checkIfCanVote() {
       noVoteMessage.id = `noVoteMessage${poll.title}`
       const containerBtns = document.getElementById(`containerBtns${poll.title}`);
       if (containerBtns) containerBtns.appendChild(noVoteMessage);
+
+      // Poistaa "Olet jo äänestänyt tekstin"
+      const lockedMsg = document.getElementById(`lockedMsg${poll.title}`);
+      if (lockedMsg) lockedMsg.remove();
     })
   } else if (loggedInAs) {
     const polls = getPolls()
@@ -258,5 +264,106 @@ function checkIfCanVote() {
       }
     })
   }
+}
+
+// Event listeneri äänestyksille
+document.addEventListener('click', function(event) {
+  if (event.target.id.startsWith('voteBtn')) {
+    const pollTitle = event.target.id.replace('voteBtn', '');
+    const selectedOption = document.querySelector(`input[name="poll_${pollTitle}"]:checked`);
+    
+    // Jos vaihtoehtoa ei ole valittu ilmoittaa siitä
+    if (!selectedOption) {
+      const existing = document.getElementById(`voteWarning${pollTitle}`);
+      if (existing) existing.remove();
+
+      const warning = document.createElement('p');
+      warning.id = `voteWarning${pollTitle}`;
+      warning.textContent = 'Valitse vaihtoehto ennen äänestämistä!';
+      warning.style.color = 'tomato';
+      warning.style.marginTop = '8px';
+      warning.style.opacity = '1';
+      warning.style.transition = 'opacity 3s ease';
+      event.target.insertAdjacentElement('afterend', warning);
+      setTimeout(() => { warning.style.opacity = '0'; }, 10);
+      setTimeout(() => { if (warning.parentNode) warning.parentNode.removeChild(warning); }, 3010);
+      return;
+    }
+
+    const polls = getPolls();
+    const poll = polls.find(p => p.title === pollTitle);
+    const optionIndex = parseInt(selectedOption.id.split('opt')[1]);
+    
+    poll.options[optionIndex].votes++;
+    savePolls(polls);
+
+    // Merkitään äänestäjä ja estetään kaksoisäänestys
+    poll.voters = poll.voters || [];
+
+    // Jos ei ole aiemmin äänestänyt, lisätään käyttäjä listaan
+    poll.voters.push(loggedInAs);
+    savePolls(polls);
+    // Lukitaan äänestys estämään lisääänestykset
+    poll.locked = true;
+    savePolls(polls);
+
+    // Poistetaan äänestysnappi ja estetään vaihtoehtojen valinta
+    const inputs = document.getElementsByName(`poll_${pollTitle}`);
+    for (let i = 0; i < inputs.length; i++) {
+      inputs[i].disabled = true;
+    }
+
+    const voteBtnEl = document.getElementById(`voteBtn${pollTitle}`);
+    if (voteBtnEl) voteBtnEl.remove();
+
+    // Näytetään viesti jossa ilmoitetaan että on jo äänestänyt
+    const containerBtns = document.getElementById(`containerBtns${pollTitle}`);
+    if (containerBtns) {
+      const lockedMsg = document.createElement('span');
+      lockedMsg.className = 'text-muted ps-2 pb-2 d-inline-block';
+      lockedMsg.textContent = 'Olet jo äänestänyt';
+      containerBtns.appendChild(lockedMsg);
+    }
+  }
+});
+
+
+function updatePollVoted() {
+  const polls = getPolls();
+  polls.forEach(poll => {
+    const pollTitle = poll.title;
+    const inputs = document.getElementsByName(`poll_${pollTitle}`);
+    if (!inputs || inputs.length === 0) return;
+    const voteBtnEl = document.getElementById(`voteBtn${pollTitle}`);
+    const containerBtns = document.getElementById(`containerBtns${pollTitle}`);
+    const lockedFlag = !!poll.locked;
+    const userHasVoted = loggedInAs && Array.isArray(poll.voters) && poll.voters.includes(loggedInAs);
+    const shouldBeLocked = lockedFlag || userHasVoted;
+    if (shouldBeLocked) {
+      // Vaihtoehdot pois käytöstä
+      for (let i = 0; i < inputs.length; i++) {
+        inputs[i].disabled = true;
+      }
+      // Poistaa äänestys napin
+      if (voteBtnEl) voteBtnEl.remove();
+      // Olet jo äänestänyt viesti
+      if (containerBtns) {
+        const existingMsg = document.getElementById(`lockedMsg${pollTitle}`);
+        if (!existingMsg) {
+          const msg = document.createElement('span');
+          msg.id = `lockedMsg${pollTitle}`;
+          msg.className = 'text-muted ps-2 pb-2 d-inline-block';
+          msg.textContent = userHasVoted ? 'Olet jo äänestänyt' : 'Äänestys lukittu';
+          containerBtns.appendChild(msg);
+        }
+      }
+    } else {
+      for (let i = 0; i < inputs.length; i++) {
+        inputs[i].disabled = false;
+      }
+      const existingMsg = document.getElementById(`lockedMsg${pollTitle}`);
+      if (existingMsg) existingMsg.remove();
+    }
+  });
 }
 
