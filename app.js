@@ -334,30 +334,28 @@ function updatePollVoted() {
     const pollTitle = poll.title;
     const inputs = document.getElementsByName(`poll_${pollTitle}`);
     if (!inputs || inputs.length === 0) return;
+    
     const voteBtnEl = document.getElementById(`voteBtn${pollTitle}`);
     const containerBtns = document.getElementById(`containerBtns${pollTitle}`);
-    const lockedFlag = !!poll.locked;
     const userHasVoted = loggedInAs && Array.isArray(poll.voters) && poll.voters.includes(loggedInAs);
-    const shouldBeLocked = lockedFlag || userHasVoted;
-    if (shouldBeLocked) {
-      // Vaihtoehdot pois käytöstä
+
+    if (userHasVoted) {
+      // Lukitsee äänestyksen jos käyttäjä on jo äänestänyt
       for (let i = 0; i < inputs.length; i++) {
         inputs[i].disabled = true;
       }
-      // Poistaa äänestys napin
       if (voteBtnEl) voteBtnEl.remove();
-      // Olet jo äänestänyt viesti
-      if (containerBtns) {
-        const existingMsg = document.getElementById(`lockedMsg${pollTitle}`);
-        if (!existingMsg) {
-          const msg = document.createElement('span');
-          msg.id = `lockedMsg${pollTitle}`;
-          msg.className = 'text-muted ps-2 pb-2 d-inline-block';
-          msg.textContent = userHasVoted ? 'Olet jo äänestänyt' : 'Äänestys lukittu';
-          containerBtns.appendChild(msg);
-        }
+      
+      const existingMsg = document.getElementById(`lockedMsg${pollTitle}`);
+      if (!existingMsg && containerBtns) {
+        const msg = document.createElement('span');
+        msg.id = `lockedMsg${pollTitle}`;
+        msg.className = 'text-muted ps-2 pb-2 d-inline-block';
+        msg.textContent = 'Olet jo äänestänyt';
+        containerBtns.appendChild(msg);
       }
     } else {
+      // Pitää äänestyksen avoinna jos käyttäjä ei ole vielä äänestänyt
       for (let i = 0; i < inputs.length; i++) {
         inputs[i].disabled = false;
       }
@@ -367,3 +365,60 @@ function updatePollVoted() {
   });
 }
 
+// Näytä tulokset funktio ja event listenerit
+function showResults(pollTitle) {
+  const polls = getPolls();
+  const poll = polls.find(p => p.title === pollTitle);
+  if (!poll) return;
+
+  // Tarkistaa onko tulokset näkyvissä
+  const showingResults = document.querySelector(`label[for="${pollTitle}_opt0"]`).textContent.includes('ääntä');
+
+  if (showingResults) {
+    // Palauttaa normaaliin näkymään
+    poll.options.forEach((opt, index) => {
+      const label = document.querySelector(`label[for="${pollTitle}_opt${index}"]`);
+      if (label) {
+        label.innerHTML = escapeHtml(opt.name);
+      }
+    });
+    return;
+  }
+
+  // Näyttää tulokset
+  const totalVotes = (poll.options || []).reduce((sum, o) => sum + (o.votes || 0), 0);
+
+  poll.options.forEach((opt, index) => {
+    const votes = opt.votes || 0;
+    const percent = totalVotes > 0 ? Math.round((votes / totalVotes) * 100) : 0;
+    const label = document.querySelector(`label[for="${pollTitle}_opt${index}"]`);
+    
+    if (label) {
+      if (totalVotes === 0) {
+        label.innerHTML = `${escapeHtml(opt.name)} (0 ääntä)`;
+      } else {
+        label.innerHTML = `${escapeHtml(opt.name)} - ${votes} ääntä (${percent}%)`;
+      }
+    }
+  });
+}
+
+// Pieni apufunktio estämään XSS kun lisätään käyttäjän antamaa tekstiä DOMiin
+function escapeHtml(unsafe) {
+  return String(unsafe)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+// Event listeneri katso tulokset napille
+document.addEventListener('click', function(event) {
+  if (!event.target || typeof event.target.id !== 'string') return;
+  if (event.target.id.startsWith('checkVotesBtn')) {
+    event.preventDefault();
+    const pollTitle = event.target.id.replace('checkVotesBtn', '');
+    showResults(pollTitle);
+  }
+});
