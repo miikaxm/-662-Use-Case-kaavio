@@ -167,9 +167,9 @@ form.addEventListener("submit", (e) => {
 
   // Luodaan äänestys kenttä
   const pollHTML = `
-      <div class="col-12 col-sm-6 col-md-4 mb-3 text-white">
+      <div class="col-12 col-sm-6 col-md-4 mb-3 text-white" id="forRemove_${title}">
         <div class="" style="border: 2px solid rgb(70,70,70); border-radius: 5px;">
-          <h4 class="pt-2">${title}</h4>
+          <h4 id="pollcontainer_${title} class="pt-2">${title}</h4>
           <p class="mx-2 pt-2 pb-3" style="border-bottom: 2px solid rgb(70,70,70);">${description}</p>
           ${options.map((opt, i) => `
             <div class="m-2 form-check my-2">
@@ -208,9 +208,9 @@ function checkPollState() {
   const polls = getPolls()
   polls.forEach(poll => {
     const pollHTML = `
-      <div class="col-12 col-sm-6 col-md-4 mb-3 text-white">
+      <div class="col-12 col-sm-6 col-md-4 mb-3 text-white" id="forRemove_${poll.title}">
         <div class="" style="border: 2px solid rgb(70,70,70); border-radius: 5px;">
-          <h4 class="pt-2">${poll.title}</h4>
+          <h4 id="pollcontainer_${poll.title}" class="pt-2">${poll.title}</h4>
           <p class="mx-2 pt-2 pb-3" style="border-bottom: 2px solid rgb(70,70,70);">${poll.description}</p>
           ${poll.options.map((opt, i) => `
             <div class="m-2 form-check my-2">
@@ -232,6 +232,9 @@ function checkPollState() {
 }
 
 function checkIfCanVote() {
+  const username = document.getElementById("loginUsername").value.trim();
+  const users = getUsers()
+  const user = users.find(u => u.username.toLowerCase() === username.toLowerCase());
   if (loggedInAs === null) {
     const polls = getPolls()
     polls.forEach(poll => {
@@ -250,17 +253,35 @@ function checkIfCanVote() {
       const lockedMsg = document.getElementById(`lockedMsg${poll.title}`);
       if (lockedMsg) lockedMsg.remove();
     })
-  } else if (loggedInAs) {
+  } else if (loggedInAs&&user.moderator === true) {
     const polls = getPolls()
-    polls.forEach(poll => {
-      const btnCheckVotes =`<a style="display:inline; padding-right:50px; text-decoration:none;" class="text-white" href="#" id="checkVotesBtn${poll.title}">Katso tulokset</a>`
-      const btnVote = `<button type="button" class="btn border" style="display:inline;" id="voteBtn${poll.title}">Äänestä</button>`
-      const noVoteMessage = document.getElementById(`noVoteMessage${poll.title}`)
-      if (noVoteMessage) noVoteMessage.remove()
-      const containerBtns = document.getElementById(`containerBtns${poll.title}`);
-      if (containerBtns) {
-          containerBtns.insertAdjacentHTML('beforeend', btnCheckVotes);
-          containerBtns.insertAdjacentHTML('beforeend', btnVote);
+        polls.forEach(poll => {
+          const btnCheckVotes =`<a style="display:inline; padding-right:50px; text-decoration:none;" class="text-white" href="#" id="checkVotesBtn${poll.title}">Katso tulokset</a>`
+          const btnVote = `<button type="button" class="btn border" style="display:inline;" id="voteBtn${poll.title}">Äänestä</button>`
+          const deleteBtn = `<button type="button" class="btn-close" style="display:inline; padding-left:20px" id="deleteBtn${poll.title}" aria-label="Close"></button>`
+          const noVoteMessage = document.getElementById(`noVoteMessage${poll.title}`)
+          if (noVoteMessage) noVoteMessage.remove()
+          const containerBtns = document.getElementById(`containerBtns${poll.title}`);
+          const wholeContainer = document.getElementById(`pollcontainer_${poll.title}`)
+          if (containerBtns) {
+              containerBtns.insertAdjacentHTML('beforeend', btnCheckVotes);
+              containerBtns.insertAdjacentHTML('beforeend', btnVote);
+          if (wholeContainer) {
+            wholeContainer.insertAdjacentHTML("beforeend", deleteBtn)
+          }
+      }
+    })
+      } else if (loggedInAs) {
+        const polls = getPolls()
+        polls.forEach(poll => {
+          const btnCheckVotes =`<a style="display:inline; padding-right:50px; text-decoration:none;" class="text-white" href="#" id="checkVotesBtn${poll.title}">Katso tulokset</a>`
+          const btnVote = `<button type="button" class="btn border" style="display:inline;" id="voteBtn${poll.title}">Äänestä</button>`
+          const noVoteMessage = document.getElementById(`noVoteMessage${poll.title}`)
+          if (noVoteMessage) noVoteMessage.remove()
+          const containerBtns = document.getElementById(`containerBtns${poll.title}`);
+          if (containerBtns) {
+              containerBtns.insertAdjacentHTML('beforeend', btnCheckVotes);
+              containerBtns.insertAdjacentHTML('beforeend', btnVote);
       }
     })
   }
@@ -422,3 +443,25 @@ document.addEventListener('click', function(event) {
     showResults(pollTitle);
   }
 });
+
+function removePoll(pollTitle) {
+  // Hakee kaikki äänestykset
+  const polls = getPolls();
+  // Poistaa äänestyksen
+  const updatedPolls = polls.filter(p => p.title !== pollTitle);
+  savePolls(updatedPolls);
+  const pollElement = document.getElementById(`forRemove_${pollTitle}`)
+  if (pollElement) {
+    pollElement.remove();
+  }
+  console.log(`Äänestys "${pollTitle}" poistettu.`);
+}
+
+document.addEventListener("click", function(event) {
+  if (event.target.id.startsWith("deleteBtn")) {
+    const pollTitle = event.target.id.replace("deleteBtn", "");
+    removePoll(pollTitle);
+  }
+});
+
+
