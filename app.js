@@ -73,6 +73,7 @@ function updateLogInState() {
     }
 }
 
+// Rekisteröinti
 function register(event){
     event.preventDefault()
     const username = document.getElementById("registerUsername").value.trim();
@@ -96,6 +97,7 @@ function register(event){
     registerModal.hide()
 }
 
+// Kirjautuminen
 function logIn(event){
     event.preventDefault()
     const username = document.getElementById("loginUsername").value.trim();
@@ -124,6 +126,7 @@ function logIn(event){
     } 
 }
 
+// Ulos kirjautuminen
 function logOff() {
     if (loggedInAs !== null){
         checkLogState()
@@ -132,6 +135,7 @@ function logOff() {
     }
 }
 
+// Äänestyksen luonti
 addOptionBtn.addEventListener("click", () => {
   const input = document.createElement("input");
   input.type = "text";
@@ -204,6 +208,7 @@ document.addEventListener("DOMContentLoaded", function() {
   checkIfCanVote()
 })
 
+// Äänestysten uudelleen lataus sivun latautuessa
 function checkPollState() {
   const polls = getPolls()
   polls.forEach(poll => {
@@ -424,7 +429,6 @@ function showResults(pollTitle) {
   });
 }
 
-// Pieni apufunktio estämään XSS kun lisätään käyttäjän antamaa tekstiä DOMiin
 function escapeHtml(unsafe) {
   return String(unsafe)
     .replaceAll('&', '&amp;')
@@ -457,6 +461,7 @@ function removePoll(pollTitle) {
   console.log(`Äänestys "${pollTitle}" poistettu.`);
 }
 
+// Event listeneri poisto napeille
 document.addEventListener("click", function(event) {
   if (event.target.id.startsWith("deleteBtn")) {
     const pollTitle = event.target.id.replace("deleteBtn", "");
