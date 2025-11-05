@@ -146,6 +146,12 @@ addOptionBtn.addEventListener("click", () => {
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
+
+  // Käyttäjän haku
+  const username = document.getElementById("loginUsername").value.trim();
+  const users = getUsers()
+  const user = users.find(u => u.username.toLowerCase() === username.toLowerCase());
+
   const title = document.getElementById("pollTitle").value.trim();
   const description = document.getElementById("pollDescription").value.trim();
   const polls = getPolls()
@@ -173,7 +179,7 @@ form.addEventListener("submit", (e) => {
   const pollHTML = `
       <div class="col-12 col-sm-6 col-md-4 mb-3 text-white" id="forRemove_${title}">
         <div class="" style="border: 2px solid rgb(70,70,70); border-radius: 5px;">
-          <h4 id="pollcontainer_${title} class="pt-2">${title}</h4>
+          <h4 id="pollcontainer_${title}" class="pt-2">${title}</h4>
           <p class="mx-2 pt-2 pb-3" style="border-bottom: 2px solid rgb(70,70,70);">${description}</p>
           ${options.map((opt, i) => `
             <div class="m-2 form-check my-2">
@@ -199,6 +205,15 @@ form.addEventListener("submit", (e) => {
     <input type="text" class="form-control mb-2 pollOption" placeholder="Vaihtoehto 1" required>
     <input type="text" class="form-control mb-2 pollOption" placeholder="Vaihtoehto 2" required>
   `;
+
+  // Adminille poistonappi
+  if (user.moderator === true) {
+    const wholeContainer = document.getElementById(`pollcontainer_${title}`)
+    wholeContainer.innerHTML = `
+    ${title}
+    <button type="button" class="btn-close" style="display:inline; padding-left:20px" id="deleteBtn${title}" aria-label="Close"></button>
+    `;
+  }
 });
 
 
